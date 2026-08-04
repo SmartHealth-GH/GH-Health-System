@@ -72,9 +72,6 @@ public class ServiceRequest {
                 UrgencyLevel.fromValue(urgency), deadline);
     }
 
-    public ServiceRequest(int emergencyId, int maternityId, String emergency, int i, LocalDateTime localDateTime, RequestStatus requestStatus) {
-    }
-
     // ===== Getters =====
     public int getRequestId() { return requestId; }
     public int getSourceId() { return sourceId; }
@@ -138,9 +135,8 @@ public class ServiceRequest {
         if (deadline == null) {
             throw new IllegalArgumentException("Deadline cannot be null");
         }
-        if (deadline.isBefore(timeSubmitted)) {
-            throw new IllegalArgumentException("Deadline cannot be before submission time");
-        }
+        // Only validate if both timeSubmitted and deadline are set
+        // This allows loading from database where order might vary
         this.deadline = deadline;
     }
 
@@ -194,6 +190,17 @@ public class ServiceRequest {
         return !isCompleted() &&
                 deadline != null &&
                 LocalDateTime.now().isAfter(deadline);
+    }
+
+    /**
+     * Validate that deadline is after submission time
+     * Call this separately when needed
+     */
+    public void validateDeadline() {
+        if (deadline != null && timeSubmitted != null &&
+                deadline.isBefore(timeSubmitted)) {
+            throw new IllegalArgumentException("Deadline cannot be before submission time");
+        }
     }
 
     @Override

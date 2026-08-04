@@ -57,7 +57,10 @@ public class DatabaseTest {
             System.out.println("\n📌 STEP 6: Testing CRUD operations...");
             testCrudOperations();
 
-            // STEP 7: Disconnect
+            // STEP 7: Show summary
+            displaySummary();
+
+            // STEP 8: Disconnect
             System.out.println("\n📌 STEP 7: Disconnecting...");
             db.disconnect();
             System.out.println("✅ Disconnected!");
@@ -152,5 +155,25 @@ public class DatabaseTest {
         }
 
         System.out.println("\n   ✅ All CRUD tests passed!");
+    }
+
+    /**
+     * Display summary statistics
+     */
+    private static void displaySummary() throws SQLException {
+        LocationDAO locDAO = new LocationDAO();
+        RoadDAO roadDAO = new RoadDAO();
+        ServiceRequestDAO reqDAO = new ServiceRequestDAO();
+        ResourceDAO resDAO = new ResourceDAO();
+
+        System.out.println("\n" + "=".repeat(60));
+        System.out.println("📊 DATABASE SUMMARY:");
+        System.out.println("   🏥 Locations: " + locDAO.countLocations());
+        System.out.println("   🛤️ Roads: " + roadDAO.countRoads());
+        System.out.println("   📋 Requests: " + reqDAO.countRequests());
+        System.out.println("   📋 Pending Requests: " + reqDAO.countByStatus(RequestStatus.PENDING));
+        System.out.println("   🚑 Resources: " + resDAO.countResources());
+        System.out.println("   🚑 Available Resources: " + resDAO.countAvailableResources());
+        System.out.println("=".repeat(60));
     }
 }

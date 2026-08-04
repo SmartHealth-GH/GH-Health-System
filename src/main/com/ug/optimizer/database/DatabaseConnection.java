@@ -1,18 +1,28 @@
 package main.com.ug.optimizer.database;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * Manages database connection and initialization
+ * Singleton pattern ensures only one connection exists
+ *
+ * @author GH-Health-System Team
+ * @version 1.0
+ */
 public class DatabaseConnection {
 
     private static DatabaseConnection instance;
     private Connection connection;
     private String databaseUrl;
+    private String databasePath;
 
     private DatabaseConnection() {
-        this.databaseUrl = "jdbc:sqlite:db/hospital.db";
+        this.databasePath = "db/hospital.db";
+        this.databaseUrl = "jdbc:sqlite:" + databasePath;
     }
 
     public static DatabaseConnection getInstance() {
@@ -22,10 +32,33 @@ public class DatabaseConnection {
         return instance;
     }
 
+    /**
+     * Ensures the database directory exists
+     */
+    private void ensureDatabaseDirectory() {
+        File dbFile = new File(databasePath);
+        File parentDir = dbFile.getParentFile();
+
+        if (parentDir != null && !parentDir.exists()) {
+            boolean created = parentDir.mkdirs();
+            if (created) {
+                System.out.println("✅ Created database directory: " + parentDir.getPath());
+            } else {
+                System.out.println("⚠️ Could not create database directory: " + parentDir.getPath());
+            }
+        }
+    }
+
+    /**
+     * Connect to the database
+     */
     public void connect() throws SQLException {
         if (connection == null || connection.isClosed()) {
             try {
-                // ⭐ FORCE LOAD THE DRIVER ⭐
+                // Ensure the database directory exists
+                ensureDatabaseDirectory();
+
+                // Load the SQLite JDBC driver
                 Class.forName("org.sqlite.JDBC");
             } catch (ClassNotFoundException e) {
                 throw new SQLException("SQLite JDBC Driver not found! Please add the driver to your classpath.", e);
@@ -33,6 +66,7 @@ public class DatabaseConnection {
 
             connection = DriverManager.getConnection(databaseUrl);
 
+            // Enable foreign key constraints
             try (Statement stmt = connection.createStatement()) {
                 stmt.execute("PRAGMA foreign_keys = ON");
             }
@@ -41,6 +75,9 @@ public class DatabaseConnection {
         }
     }
 
+    /**
+     * Disconnect from the database
+     */
     public void disconnect() throws SQLException {
         if (connection != null && !connection.isClosed()) {
             connection.close();
@@ -48,10 +85,16 @@ public class DatabaseConnection {
         }
     }
 
+    /**
+     * Check if connection is active
+     */
     public boolean isConnected() throws SQLException {
         return connection != null && !connection.isClosed();
     }
 
+    /**
+     * Get the connection object
+     */
     public Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
             connect();
@@ -59,6 +102,9 @@ public class DatabaseConnection {
         return connection;
     }
 
+    /**
+     * Initialize database tables (called once during setup)
+     */
     public void initializeDatabase() throws SQLException {
         connect();
 
@@ -129,10 +175,24 @@ public class DatabaseConnection {
         }
     }
 
-    public void setDatabaseUrl(String databasePath) {
+    /**
+     * Set custom database path
+     */
+    public void setDatabasePath(String databasePath) {
+        this.databasePath = databasePath;
         this.databaseUrl = "jdbc:sqlite:" + databasePath;
     }
 
+    /**
+     * Get current database path
+     */
+    public String getDatabasePath() {
+        return databasePath;
+    }
+
+    /**
+     * Get current database URL
+     */
     public String getDatabaseUrl() {
         return databaseUrl;
     }
