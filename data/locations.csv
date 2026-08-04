@@ -1,0 +1,53 @@
+name,area,type,latitude,longitude
+"Emergency Unit","Korle-Bu","EMERGENCY",5.5405,-0.2038
+"Pharmacy","Korle-Bu","PHARMACY",5.5408,-0.2040
+"Maternity Ward","Korle-Bu","WARD",5.5415,-0.2050
+"Surgical Ward","Korle-Bu","WARD",5.5410,-0.2045
+"ICU","Korle-Bu","ICU",5.5402,-0.2035
+"Outpatient Dept","Korle-Bu","OPD",5.5418,-0.2042
+"Laboratory","Korle-Bu","LABORATORY",5.5400,-0.2048
+"Radiology","Korle-Bu","RADIOLOGY",5.5407,-0.2030
+"Admin Building","Korle-Bu","ADMINISTRATION",5.5420,-0.2055
+"Ambulance Bay","Korle-Bu","TRANSPORT",5.5410,-0.2060
+"Staff Quarters","Korle-Bu","STAFF",5.5425,-0.2058
+"Records Office","Korle-Bu","RECORDS",5.5409,-0.2059
+"Blood Bank","Korle-Bu","BLOOD_BANK",5.5403,-0.2049
+"Dialysis Unit","Korle-Bu","DIALYSIS",5.5412,-0.2041
+"Endoscopy Unit","Korle-Bu","ENDOSCOPY",5.5406,-0.2053
+"Orthopedic Ward","Korle-Bu","WARD",5.5412,-0.2055
+"Pediatrics Ward","Korle-Bu","WARD",5.5418,-0.2048
+"Dermatology Clinic","Korle-Bu","CLINIC",5.5409,-0.2052
+"ENT Clinic","Korle-Bu","CLINIC",5.5404,-0.2036
+"Ophthalmology Unit","Korle-Bu","CLINIC",5.5411,-0.2041
+"Urology Unit","Korle-Bu","CLINIC",5.5407,-0.2053
+"37 Emergency Unit","37 Military","EMERGENCY",5.5592,-0.2138
+"37 Pharmacy","37 Military","PHARMACY",5.5595,-0.2140
+"37 Maternity Ward","37 Military","WARD",5.5602,-0.2150
+"37 Surgical Ward","37 Military","WARD",5.5598,-0.2145
+"37 ICU","37 Military","ICU",5.5590,-0.2135
+"37 Outpatient","37 Military","OPD",5.5605,-0.2142
+"37 Laboratory","37 Military","LABORATORY",5.5588,-0.2148
+"37 Radiology","37 Military","RADIOLOGY",5.5595,-0.2130
+"37 Admin","37 Military","ADMINISTRATION",5.5608,-0.2155
+"37 Ambulance Bay","37 Military","TRANSPORT",5.5598,-0.2160
+"UGMC Emergency","Legon","EMERGENCY",5.6485,-0.1938
+"UGMC Pharmacy","Legon","PHARMACY",5.6488,-0.1940
+"UGMC Maternity","Legon","WARD",5.6495,-0.1950
+"UGMC Surgical","Legon","WARD",5.6490,-0.1945
+"UGMC ICU","Legon","ICU",5.6482,-0.1935
+"UGMC Outpatient","Legon","OPD",5.6498,-0.1942
+"UGMC Laboratory","Legon","LABORATORY",5.6480,-0.1948
+"UGMC Radiology","Legon","RADIOLOGY",5.6487,-0.1930
+"Ridge Emergency","Ridge","EMERGENCY",5.5785,-0.2038
+"Ridge Pharmacy","Ridge","PHARMACY",5.5788,-0.2040
+"Ridge Maternity","Ridge","WARD",5.5795,-0.2050
+"Ridge Surgical","Ridge","WARD",5.5790,-0.2045
+"Ridge ICU","Ridge","ICU",5.5782,-0.2035
+"Ridge Outpatient","Ridge","OPD",5.5798,-0.2042
+"Ridge Lab","Ridge","LABORATORY",5.5780,-0.2048
+"Ridge Admin","Ridge","ADMINISTRATION",5.5808,-0.2055
+"Doctors Quarters","Korle-Bu","STAFF",5.5420,-0.2058
+"Nurses Station","Korle-Bu","STAFF",5.5409,-0.2059
+"Helipad","Korle-Bu","TRANSPORT",5.5430,-0.2045
+"Parking Lot A","Korle-Bu","PARKING",5.5435,-0.2050
+"Parking Lot B","Korle-Bu","PARKING",5.5400,-0.2070
