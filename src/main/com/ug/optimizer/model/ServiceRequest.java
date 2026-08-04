@@ -72,6 +72,9 @@ public class ServiceRequest {
                 UrgencyLevel.fromValue(urgency), deadline);
     }
 
+    public ServiceRequest(int emergencyId, int maternityId, String emergency, int i, LocalDateTime localDateTime, RequestStatus requestStatus) {
+    }
+
     // ===== Getters =====
     public int getRequestId() { return requestId; }
     public int getSourceId() { return sourceId; }
