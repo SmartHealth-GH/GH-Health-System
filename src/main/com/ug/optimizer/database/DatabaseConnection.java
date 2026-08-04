@@ -1,17 +1,10 @@
-package main.com.ug.optimizer.Database;
+package main.com.ug.optimizer.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-/**
- * Manages database connection and initialization
- * Singleton pattern ensures only one connection exists
- *
- * @author GH-Health-System Team
- * @version 1.0
- */
 public class DatabaseConnection {
 
     private static DatabaseConnection instance;
@@ -29,14 +22,17 @@ public class DatabaseConnection {
         return instance;
     }
 
-    /**
-     * Connect to the database
-     */
     public void connect() throws SQLException {
         if (connection == null || connection.isClosed()) {
+            try {
+                // ⭐ FORCE LOAD THE DRIVER ⭐
+                Class.forName("org.sqlite.JDBC");
+            } catch (ClassNotFoundException e) {
+                throw new SQLException("SQLite JDBC Driver not found! Please add the driver to your classpath.", e);
+            }
+
             connection = DriverManager.getConnection(databaseUrl);
 
-            // Enable foreign key constraints
             try (Statement stmt = connection.createStatement()) {
                 stmt.execute("PRAGMA foreign_keys = ON");
             }
@@ -45,9 +41,6 @@ public class DatabaseConnection {
         }
     }
 
-    /**
-     * Disconnect from the database
-     */
     public void disconnect() throws SQLException {
         if (connection != null && !connection.isClosed()) {
             connection.close();
@@ -55,16 +48,10 @@ public class DatabaseConnection {
         }
     }
 
-    /**
-     * Check if connection is active
-     */
     public boolean isConnected() throws SQLException {
         return connection != null && !connection.isClosed();
     }
 
-    /**
-     * Get the connection object
-     */
     public Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
             connect();
@@ -72,9 +59,6 @@ public class DatabaseConnection {
         return connection;
     }
 
-    /**
-     * Initialize database tables (called once during setup)
-     */
     public void initializeDatabase() throws SQLException {
         connect();
 
@@ -145,16 +129,10 @@ public class DatabaseConnection {
         }
     }
 
-    /**
-     * Set custom database path
-     */
     public void setDatabaseUrl(String databasePath) {
         this.databaseUrl = "jdbc:sqlite:" + databasePath;
     }
 
-    /**
-     * Get current database URL
-     */
     public String getDatabaseUrl() {
         return databaseUrl;
     }

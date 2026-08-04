@@ -1,4 +1,4 @@
-package main.com.ug.optimizer.Database;
+package main.com.ug.optimizer.database;
 
 import main.com.ug.optimizer.model.Road;
 

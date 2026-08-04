@@ -1,7 +1,7 @@
-package main.com.ug.optimizer.Database.mapResource;
+package main.com.ug.optimizer.database.mapResource;
 
 
-import main.com.ug.optimizer.Database.DatabaseConnection;
+import main.com.ug.optimizer.database.DatabaseConnection;
 import main.com.ug.optimizer.model.AlgorithmRun;
 
 import java.sql.*;

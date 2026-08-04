@@ -1,9 +1,9 @@
-package main.com.ug.optimizer.Database.mapAlgorithm;
+package main.com.ug.optimizer.database.mapAlgorithm;
 
-import main.com.ug.optimizer.Database.LocationDAO;
-import main.com.ug.optimizer.Database.ResourceDAO;
-import main.com.ug.optimizer.Database.RoadDAO;
-import main.com.ug.optimizer.Database.ServiceRequestDAO;
+import main.com.ug.optimizer.database.LocationDAO;
+import main.com.ug.optimizer.database.ResourceDAO;
+import main.com.ug.optimizer.database.RoadDAO;
+import main.com.ug.optimizer.database.ServiceRequestDAO;
 import main.com.ug.optimizer.model.*;
 import main.com.ug.optimizer.model.enums.*;
 

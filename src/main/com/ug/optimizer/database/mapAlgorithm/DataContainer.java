@@ -1,4 +1,4 @@
-package main.com.ug.optimizer.Database.mapAlgorithm;
+package main.com.ug.optimizer.database.mapAlgorithm;
 
 import main.com.ug.optimizer.model.*;
 
