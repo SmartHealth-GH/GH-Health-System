@@ -1,0 +1,31 @@
+type,homeLocationId,capacity,availabilityStatus
+Ambulance,10,4,AVAILABLE
+Ambulance,10,4,IN_USE
+Doctor,4,1,AVAILABLE
+Nurse,1,1,AVAILABLE
+Operating Room,4,1,AVAILABLE
+ICU Bed,5,1,AVAILABLE
+ICU Bed,5,1,IN_USE
+X-Ray Machine,8,1,AVAILABLE
+Pharmacy Van,2,10,AVAILABLE
+Ward Bed,3,1,AVAILABLE
+Ventilator,5,1,UNDER_MAINTENANCE
+Ultrasound Machine,3,1,AVAILABLE
+Ambulance,10,4,AVAILABLE
+Ambulance,16,4,AVAILABLE
+Doctor,22,1,AVAILABLE
+Doctor,31,1,AVAILABLE
+Nurse,16,1,AVAILABLE
+Nurse,31,1,AVAILABLE
+Operating Room,24,1,AVAILABLE
+Operating Room,33,1,AVAILABLE
+ICU Bed,25,1,AVAILABLE
+ICU Bed,35,1,AVAILABLE
+Ward Bed,23,1,AVAILABLE
+Ward Bed,32,1,AVAILABLE
+X-Ray Machine,28,1,AVAILABLE
+CT Scanner,38,1,AVAILABLE
+MRI Machine,38,1,AVAILABLE
+Blood Storage Unit,13,20,AVAILABLE
+Pharmacy Van,2,10,AVAILABLE
+Wheelchair,6,5,AVAILABLE

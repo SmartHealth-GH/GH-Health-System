@@ -1,18 +1,30 @@
 package main.com.ug.optimizer.database;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * Manages database connection and initialization
+ * Singleton pattern ensures only one connection exists
+ *
+ * @author GH-Health-System Team
+ * @version 1.0
+ */
 public class DatabaseConnection {
 
     private static DatabaseConnection instance;
     private Connection connection;
     private String databaseUrl;
+    private String databasePath;
+    private boolean foreignKeysEnabled;
 
     private DatabaseConnection() {
-        this.databaseUrl = "jdbc:sqlite:db/hospital.db";
+        this.databasePath = "db/hospital.db";
+        this.databaseUrl = "jdbc:sqlite:" + databasePath;
+        this.foreignKeysEnabled = true;
     }
 
     public static DatabaseConnection getInstance() {
@@ -22,36 +34,98 @@ public class DatabaseConnection {
         return instance;
     }
 
+    /**
+     * Ensures the database directory exists
+     */
+    private void ensureDatabaseDirectory() {
+        File dbFile = new File(databasePath);
+        File parentDir = dbFile.getParentFile();
+
+        if (parentDir != null && !parentDir.exists()) {
+            boolean created = parentDir.mkdirs();
+            if (created) {
+                System.out.println("✅ Created database directory: " + parentDir.getPath());
+            }
+        }
+    }
+
+    /**
+     * Connect to the database
+     */
     public void connect() throws SQLException {
         if (connection == null || connection.isClosed()) {
             try {
-                // ⭐ FORCE LOAD THE DRIVER ⭐
+                ensureDatabaseDirectory();
                 Class.forName("org.sqlite.JDBC");
             } catch (ClassNotFoundException e) {
-                throw new SQLException("SQLite JDBC Driver not found! Please add the driver to your classpath.", e);
+                throw new SQLException("SQLite JDBC Driver not found!", e);
             }
 
             connection = DriverManager.getConnection(databaseUrl);
 
-            try (Statement stmt = connection.createStatement()) {
-                stmt.execute("PRAGMA foreign_keys = ON");
-            }
+            // Enable foreign key constraints by default
+            enableForeignKeys();
 
             System.out.println("✅ Connected to database: " + databaseUrl);
         }
     }
 
+    /**
+     * Enable foreign key constraints
+     */
+    public void enableForeignKeys() throws SQLException {
+        if (connection != null && !connection.isClosed()) {
+            try (Statement stmt = connection.createStatement()) {
+                stmt.execute("PRAGMA foreign_keys = ON");
+                foreignKeysEnabled = true;
+            }
+        }
+    }
+
+    /**
+     * Disable foreign key constraints (for bulk import)
+     */
+    public void disableForeignKeys() throws SQLException {
+        if (connection != null && !connection.isClosed()) {
+            try (Statement stmt = connection.createStatement()) {
+                stmt.execute("PRAGMA foreign_keys = OFF");
+                foreignKeysEnabled = false;
+                System.out.println("⚠️ Foreign key constraints disabled (for import)");
+            }
+        }
+    }
+
+    /**
+     * Check if foreign keys are enabled
+     */
+    public boolean isForeignKeysEnabled() {
+        return foreignKeysEnabled;
+    }
+
+    /**
+     * Disconnect from the database
+     */
     public void disconnect() throws SQLException {
         if (connection != null && !connection.isClosed()) {
+            // Ensure foreign keys are re-enabled before closing
+            if (!foreignKeysEnabled) {
+                enableForeignKeys();
+            }
             connection.close();
             System.out.println("✅ Disconnected from database");
         }
     }
 
+    /**
+     * Check if connection is active
+     */
     public boolean isConnected() throws SQLException {
         return connection != null && !connection.isClosed();
     }
 
+    /**
+     * Get the connection object
+     */
     public Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
             connect();
@@ -59,6 +133,9 @@ public class DatabaseConnection {
         return connection;
     }
 
+    /**
+     * Initialize database tables (called once during setup)
+     */
     public void initializeDatabase() throws SQLException {
         connect();
 
@@ -129,10 +206,24 @@ public class DatabaseConnection {
         }
     }
 
-    public void setDatabaseUrl(String databasePath) {
+    /**
+     * Set custom database path
+     */
+    public void setDatabasePath(String databasePath) {
+        this.databasePath = databasePath;
         this.databaseUrl = "jdbc:sqlite:" + databasePath;
     }
 
+    /**
+     * Get current database path
+     */
+    public String getDatabasePath() {
+        return databasePath;
+    }
+
+    /**
+     * Get current database URL
+     */
     public String getDatabaseUrl() {
         return databaseUrl;
     }

@@ -84,7 +84,72 @@ Examples:
 - Repository classes
 
 ---
+## 🗄️ Database Setup
 
+This project uses **SQLite** as the database. Follow these steps to set it up on your machine.
+
+---
+
+### 📥 Required Dependencies
+
+You need the following JAR files for database connectivity:
+
+1. **SQLite JDBC Driver** (`sqlite-jdbc-3.46.0.0.jar`)
+2. **SLF4J API** (`slf4j-api-2.0.16.jar`)
+3. **SLF4J Simple Implementation** (`slf4j-simple-2.0.16.jar`)
+
+---
+
+### 🚀 Option 1: Maven Setup
+
+If your project has `pom.xml`, Maven will automatically download all dependencies.
+
+**Steps:**
+
+1. Ensure your `pom.xml` has these dependencies:
+   ```xml
+   <dependencies>
+       <!-- SQLite JDBC Driver -->
+       <dependency>
+           <groupId>org.xerial</groupId>
+           <artifactId>sqlite-jdbc</artifactId>
+           <version>3.46.0.0</version>
+       </dependency>
+       
+       <!-- SLF4J API -->
+       <dependency>
+           <groupId>org.slf4j</groupId>
+           <artifactId>slf4j-api</artifactId>
+           <version>2.0.16</version>
+       </dependency>
+       
+       <!-- SLF4J Simple Implementation -->
+       <dependency>
+           <groupId>org.slf4j</groupId>
+           <artifactId>slf4j-simple</artifactId>
+           <version>2.0.16</version>
+       </dependency>
+   </dependencies>
+---
+
+Option 2
+If Maven is not working, manually download these JARs:
+sqlite-jdbc-3.46.0.0.jar	Download
+slf4j-api-2.0.16.jar	Download
+slf4j-simple-2.0.16.jar	Download
+
+Add to IntelliJ
+1. File → Project Structure → Libraries
+2. Click "+" → "Java"
+3. Select all 3 downloaded JAR files (Ctrl+click to select multiple)
+4. Click OK
+5. Click Apply → OK
+
+Verify Database is Working
+src/main/java/com/ug/optimizer/database/SimpleDBTest.java
+
+
+---
 ## `datastructures/`
 
 Contains all custom data structures required for the project.
