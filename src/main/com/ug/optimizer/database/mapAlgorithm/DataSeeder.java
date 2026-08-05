@@ -36,17 +36,23 @@ public class DataSeeder {
     public void seedAll() throws SQLException {
         System.out.println("🌱 Seeding sample data...");
 
+        // Check if data already exists
+        if (locationDAO.countLocations() > 0) {
+            System.out.println("   ✅ Data already exists. Skipping seed.");
+            return;
+        }
+
         // Step 1: Seed locations
         int emergencyId = seedLocations();
 
         // Step 2: Seed roads
-        seedRoads(emergencyId);
+        seedRoads();
 
         // Step 3: Seed service requests
-        seedRequests(emergencyId);
+        seedRequests();
 
         // Step 4: Seed resources
-        seedResources(emergencyId);
+        seedResources();
 
         System.out.println("✅ Sample data seeded successfully!");
         System.out.println("   " + locationDAO.countLocations() + " locations");
@@ -83,7 +89,7 @@ public class DataSeeder {
     /**
      * Seed roads
      */
-    private void seedRoads(int emergencyId) throws SQLException {
+    private void seedRoads() throws SQLException {
         // Get all location IDs
         var locations = locationDAO.getAllLocations();
         var ids = locations.stream().mapToInt(Location::getLocationId).toArray();
@@ -100,16 +106,17 @@ public class DataSeeder {
     }
 
     /**
-     * Seed service requests
+     * Seed service requests with proper dates
      */
-    private void seedRequests(int emergencyId) throws SQLException {
-        LocalDateTime now = LocalDateTime.now();
-
+    private void seedRequests() throws SQLException {
         // Get location IDs
         var locations = locationDAO.getAllLocations();
         var ids = locations.stream().mapToInt(Location::getLocationId).toArray();
         int lastIndex = ids.length - 1;
 
+        LocalDateTime now = LocalDateTime.now();
+
+        // Create requests with deadlines in the future
         requestDAO.insertRequest(new ServiceRequest(ids[0], ids[2], "Emergency", UrgencyLevel.EMERGENCY, now.plusHours(1)));
         requestDAO.insertRequest(new ServiceRequest(ids[1], ids[0], "Pharmacy", UrgencyLevel.MODERATE, now.plusHours(8)));
         requestDAO.insertRequest(new ServiceRequest(ids[3], ids[4], "Surgery", UrgencyLevel.URGENT, now.plusHours(4)));
@@ -121,8 +128,10 @@ public class DataSeeder {
         requestDAO.insertRequest(new ServiceRequest(ids[4], ids[3], "ICU Transfer", UrgencyLevel.URGENT, now.plusMinutes(30)));
         requestDAO.insertRequest(new ServiceRequest(ids[6], ids[1], "Lab Results", UrgencyLevel.MODERATE, now.plusHours(2)));
 
-        // Add one completed request
-        ServiceRequest completed = new ServiceRequest(ids[5], ids[7], "Lab Test", UrgencyLevel.LOW, now.minusHours(3));
+        // Add one completed request (with past deadline)
+        LocalDateTime pastTime = now.minusHours(3);
+        ServiceRequest completed = new ServiceRequest(ids[5], ids[7], "Lab Test", UrgencyLevel.LOW, pastTime.plusHours(2));
+        completed.setTimeSubmitted(pastTime);
         completed.setStatus(RequestStatus.COMPLETED);
         requestDAO.insertRequest(completed);
     }
@@ -130,7 +139,7 @@ public class DataSeeder {
     /**
      * Seed resources
      */
-    private void seedResources(int emergencyId) throws SQLException {
+    private void seedResources() throws SQLException {
         // Get location IDs
         var locations = locationDAO.getAllLocations();
         var ids = locations.stream().mapToInt(Location::getLocationId).toArray();
