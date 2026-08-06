@@ -1,4 +1,4 @@
 package main.com.ug.optimizer.datastructures;
 
-public class DynamicArray {
+public class MyArrayLIst {
 }
