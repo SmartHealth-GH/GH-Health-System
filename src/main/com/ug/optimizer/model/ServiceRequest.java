@@ -13,7 +13,8 @@ import java.time.format.DateTimeFormatter;
  * @author GH-Health-System Team
  * @version 1.0
  */
-public class ServiceRequest {
+public class ServiceRequest implements Comparable<ServiceRequest> {  // ← ADD THIS!
+
     private int requestId;
     private int sourceId;
     private int destinationId;
@@ -135,8 +136,6 @@ public class ServiceRequest {
         if (deadline == null) {
             throw new IllegalArgumentException("Deadline cannot be null");
         }
-        // Only validate if both timeSubmitted and deadline are set
-        // This allows loading from database where order might vary
         this.deadline = deadline;
     }
 
@@ -194,7 +193,6 @@ public class ServiceRequest {
 
     /**
      * Validate that deadline is after submission time
-     * Call this separately when needed
      */
     public void validateDeadline() {
         if (deadline != null && timeSubmitted != null &&
@@ -202,6 +200,30 @@ public class ServiceRequest {
             throw new IllegalArgumentException("Deadline cannot be before submission time");
         }
     }
+
+    // =============================================
+    // 🔥 COMPARABLE IMPLEMENTATION FOR PRIORITY QUEUE
+    // =============================================
+
+    /**
+     * Compares this ServiceRequest with another by urgency level.
+     * Higher urgency (EMERGENCY) should come first (smaller value).
+     *
+     * @param other The other ServiceRequest to compare with
+     * @return negative if this is more urgent, positive if less urgent
+     */
+    @Override
+    public int compareTo(ServiceRequest other) {
+        // Compare by urgency (higher urgency value = higher priority)
+        // EMERGENCY = 5, URGENT = 4, MODERATE = 3, LOW = 2, VERY_LOW = 1
+        // We want EMERGENCY to come first, so we compare urgency values
+        // Higher urgency = smaller value (since we want min-heap)
+        return Integer.compare(this.urgency.getValue(), other.urgency.getValue());
+    }
+
+    // =============================================
+    // STANDARD METHODS
+    // =============================================
 
     @Override
     public String toString() {
