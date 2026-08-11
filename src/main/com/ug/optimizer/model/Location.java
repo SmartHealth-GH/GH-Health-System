@@ -56,6 +56,9 @@ public class Location {
         this(name, area, LocationType.fromString(type), latitude, longitude);
     }
 
+    public Location(int locationId, String emergencyUnit, String area, String emergency, double latitude, double longitude) {
+    }
+
     // ===== Getters =====
     public int getLocationId() { return locationId; }
     public String getName() { return name; }

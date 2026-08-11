@@ -17,6 +17,9 @@ import java.util.NoSuchElementException;
  * @version 1.0
  */
 public class MyLinkedList<T> implements Iterable<T> {
+    public T get(int i) {
+        return null;
+    }
 
     // =============================================
     // NODE CLASS
