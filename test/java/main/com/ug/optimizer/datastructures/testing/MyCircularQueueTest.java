@@ -1,6 +1,6 @@
 package main.com.ug.optimizer.datastructures.queue;
 
-import main.com.ug.optimizer.datastructures.queue.MyCircularQueue;
+import main.com.ug.optimizer.datastructures.MyCircularQueue;
 
 /**
  * Unit tests for MyCircularQueue
@@ -26,6 +26,9 @@ public class MyCircularQueueTest {
         testContains();
         testEdgeCases();
         testInvalidInputs();
+
+        // 🔥 NEW: Front/Rear Movement Trace Evidence
+        testFrontRearTrace();
 
         System.out.println("\n" + "=".repeat(60));
         System.out.println("📊 RESULTS:");
@@ -123,7 +126,6 @@ public class MyCircularQueueTest {
         System.out.println("\n✅ Test: Wrap Around");
         MyCircularQueue<Integer> queue = new MyCircularQueue<>(4);
 
-        // Fill the queue
         for (int i = 1; i <= 4; i++) {
             queue.enqueue(i);
         }
@@ -132,16 +134,14 @@ public class MyCircularQueueTest {
         assert queue.isFull() : "Queue should be full";
         assert queue.toString().equals("[1, 2, 3, 4]") : "Queue should be [1, 2, 3, 4]";
 
-        // Dequeue 2 elements
-        queue.dequeue();  // remove 1
-        queue.dequeue();  // remove 2
+        queue.dequeue();
+        queue.dequeue();
 
         System.out.println("   After 2 dequeues: " + queue.debugString());
         assert queue.size() == 2 : "Size should be 2";
         assert queue.toString().equals("[3, 4]") : "Queue should be [3, 4]";
         assert !queue.isFull() : "Should not be full";
 
-        // Add 2 more - should wrap around
         queue.enqueue(5);
         queue.enqueue(6);
 
@@ -150,7 +150,6 @@ public class MyCircularQueueTest {
         assert queue.size() == 4 : "Size should be 4";
         assert queue.toString().equals("[3, 4, 5, 6]") : "Queue should be [3, 4, 5, 6]";
 
-        // Verify front/rear positions
         assert queue.front() == 3 : "Front should be 3";
 
         passed++;
@@ -171,7 +170,6 @@ public class MyCircularQueueTest {
         assert queue.toString().equals("[]") : "Queue should be [] after clear";
         assert queue.getCapacity() == 5 : "Capacity should remain 5";
 
-        // Can add after clear
         queue.enqueue("X");
         assert queue.size() == 1 : "Should be able to add after clear";
         assert queue.front().equals("X") : "Front should be 'X'";
@@ -193,7 +191,6 @@ public class MyCircularQueueTest {
         assert queue.contains("C") : "Should contain 'C'";
         assert !queue.contains("X") : "Should not contain 'X'";
 
-        // After dequeuing
         queue.dequeue();
         assert !queue.contains("A") : "Should not contain 'A' after dequeue";
         assert queue.contains("B") : "Should still contain 'B'";
@@ -205,7 +202,6 @@ public class MyCircularQueueTest {
     private static void testEdgeCases() {
         System.out.println("\n✅ Test: Edge Cases");
 
-        // Single element
         MyCircularQueue<String> queue = new MyCircularQueue<>(5);
         queue.enqueue("Only");
         assert queue.size() == 1 : "Size should be 1";
@@ -213,7 +209,6 @@ public class MyCircularQueueTest {
         assert queue.dequeue().equals("Only") : "Dequeue should be 'Only'";
         assert queue.isEmpty() : "Should be empty after dequeue";
 
-        // Null element
         queue.enqueue(null);
         assert queue.size() == 1 : "Size should be 1";
         assert queue.front() == null : "Front should be null";
@@ -221,7 +216,6 @@ public class MyCircularQueueTest {
         queue.dequeue();
         assert queue.isEmpty() : "Should be empty after removing null";
 
-        // Multiple wrap arounds
         MyCircularQueue<Integer> q = new MyCircularQueue<>(3);
         for (int i = 0; i < 100; i++) {
             q.enqueue(i);
@@ -238,7 +232,6 @@ public class MyCircularQueueTest {
     private static void testInvalidInputs() {
         System.out.println("\n✅ Test: Invalid Inputs");
 
-        // Invalid capacity
         try {
             MyCircularQueue<String> queue = new MyCircularQueue<>(0);
             System.out.println("   ❌ Failed: Should throw exception for capacity 0");
@@ -257,7 +250,6 @@ public class MyCircularQueueTest {
             // Expected
         }
 
-        // Dequeue from empty
         MyCircularQueue<String> queue = new MyCircularQueue<>(3);
         try {
             queue.dequeue();
@@ -268,7 +260,6 @@ public class MyCircularQueueTest {
             // Expected
         }
 
-        // Front from empty
         try {
             queue.front();
             System.out.println("   ❌ Failed: front() on empty should throw exception");
@@ -278,7 +269,6 @@ public class MyCircularQueueTest {
             // Expected
         }
 
-        // Enqueue to full
         queue.enqueue("A");
         queue.enqueue("B");
         queue.enqueue("C");
@@ -293,5 +283,55 @@ public class MyCircularQueueTest {
 
         passed++;
         System.out.println("   ✅ Passed - All invalid inputs threw exceptions");
+    }
+
+    // =============================================
+    // 📋 FRONT/REAR MOVEMENT TRACE EVIDENCE (For Report)
+    // =============================================
+
+    private static void testFrontRearTrace() {
+        System.out.println("\n" + "=".repeat(60));
+        System.out.println("📋 MyCircularQueue FRONT/REAR MOVEMENT TRACE");
+        System.out.println("=".repeat(60));
+
+        MyCircularQueue<Integer> queue = new MyCircularQueue<>(4);
+
+        System.out.println("📊 Tracking front/rear movement with wrap-around:");
+        System.out.println("-".repeat(50));
+
+        System.out.println("Initial: " + queue.debugString());
+
+        queue.enqueue(1);
+        System.out.println("enqueue(1) → " + queue.debugString());
+
+        queue.enqueue(2);
+        System.out.println("enqueue(2) → " + queue.debugString());
+
+        queue.enqueue(3);
+        System.out.println("enqueue(3) → " + queue.debugString());
+
+        queue.enqueue(4);
+        System.out.println("enqueue(4) → " + queue.debugString() + " (FULL)");
+
+        queue.dequeue();
+        System.out.println("dequeue()  → " + queue.debugString() + " (front moved)");
+
+        queue.dequeue();
+        System.out.println("dequeue()  → " + queue.debugString() + " (front moved)");
+
+        queue.enqueue(5);
+        System.out.println("enqueue(5) → " + queue.debugString() + " (rear wrapped to 0)");
+
+        queue.enqueue(6);
+        System.out.println("enqueue(6) → " + queue.debugString() + " (rear wrapped to 1, FULL)");
+
+        System.out.println("-".repeat(50));
+        System.out.println("📊 Final state:");
+        System.out.println("   Queue: " + queue);
+        System.out.println("   Size: " + queue.size());
+        System.out.println("   Front: " + queue.front());
+        System.out.println("   Capacity: " + queue.getCapacity());
+        System.out.println("✅ Circular queue front/rear movement trace complete!");
+        System.out.println("📋 Copy this output to your report as evidence.");
     }
 }

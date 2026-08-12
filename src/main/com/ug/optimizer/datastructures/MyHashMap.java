@@ -1,4 +1,4 @@
-package main.com.ug.optimizer.datastructures.hashtable;
+package main.com.ug.optimizer.datastructures;
 
 /**
  * Custom HashMap implementation with chaining (separate chaining)

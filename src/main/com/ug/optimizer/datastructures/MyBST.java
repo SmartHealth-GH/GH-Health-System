@@ -1,6 +1,4 @@
-package main.com.ug.optimizer.datastructures.bst;
-
-import main.com.ug.optimizer.model.Location;  // Example usage
+package main.com.ug.optimizer.datastructures;
 
 /**
  * Custom Binary Search Tree implementation

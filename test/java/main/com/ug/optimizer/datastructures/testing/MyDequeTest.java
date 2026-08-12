@@ -1,6 +1,6 @@
 package main.com.ug.optimizer.datastructures.deque;
 
-import main.com.ug.optimizer.datastructures.deque.MyDeque;
+import main.com.ug.optimizer.datastructures.MyDeque;
 import main.com.ug.optimizer.model.ServiceRequest;
 import main.com.ug.optimizer.model.enums.UrgencyLevel;
 

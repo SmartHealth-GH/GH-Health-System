@@ -1,6 +1,6 @@
 package main.com.ug.optimizer.datastructures.redblacktree;
 
-import main.com.ug.optimizer.datastructures.redblacktree.MyRedBlackTree;
+import main.com.ug.optimizer.datastructures.MyRedBlackTree;
 
 /**
  * Unit tests for MyRedBlackTree

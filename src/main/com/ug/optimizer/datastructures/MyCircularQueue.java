@@ -1,4 +1,4 @@
-package main.com.ug.optimizer.datastructures.queue;
+package main.com.ug.optimizer.datastructures;
 
 import main.com.ug.optimizer.model.ServiceRequest;  // Example usage
 

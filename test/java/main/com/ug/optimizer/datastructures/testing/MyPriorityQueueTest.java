@@ -1,6 +1,6 @@
 package main.com.ug.optimizer.datastructures.priorityqueue;
 
-import main.com.ug.optimizer.datastructures.priorityqueue.MyPriorityQueue;
+import main.com.ug.optimizer.datastructures.MyPriorityQueue;
 import main.com.ug.optimizer.model.ServiceRequest;
 import main.com.ug.optimizer.model.enums.UrgencyLevel;
 
