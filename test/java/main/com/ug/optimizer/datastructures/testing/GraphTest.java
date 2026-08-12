@@ -1,7 +1,6 @@
 package main.com.ug.optimizer.datastructures.graph;
 
-import main.com.ug.optimizer.datastructures.graph.Graph;
-import main.com.ug.optimizer.datastructures.graph.Graph.Edge;
+import main.com.ug.optimizer.datastructures.Graph;
 
 /**
  * Unit tests for Graph

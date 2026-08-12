@@ -1,10 +1,11 @@
-package main.com.ug.optimizer.datastructures.linkedlist;
+package main.com.ug.optimizer.datastructures.array;
 
-import main.com.ug.optimizer.datastructures.linkedlist.MyLinkedList;
+import main.com.ug.optimizer.datastructures.MyLinkedList;
 import main.com.ug.optimizer.model.ServiceRequest;
 import main.com.ug.optimizer.model.enums.UrgencyLevel;
 
 import java.time.LocalDateTime;
+import java.util.Iterator;
 
 /**
  * Unit tests for MyLinkedList
@@ -34,6 +35,9 @@ public class MyLinkedListTest {
         testWithModelObjects();
         testEdgeCases();
         testInvalidInputs();
+
+        // 🔥 NEW: Iterator Demo Evidence
+        testIteratorDemo();
 
         System.out.println("\n" + "=".repeat(60));
         System.out.println("📊 RESULTS:");
@@ -234,7 +238,7 @@ public class MyLinkedListTest {
         assert sb.toString().equals("ABC") : "Iterator should traverse in order";
 
         // Test iterator removal (should not be supported)
-        java.util.Iterator<String> it = list.iterator();
+        Iterator<String> it = list.iterator();
         it.next();
         try {
             it.remove();
@@ -332,5 +336,37 @@ public class MyLinkedListTest {
 
         passed++;
         System.out.println("   ✅ Passed");
+    }
+
+    // =============================================
+    // 📋 ITERATOR DEMO EVIDENCE (For Report)
+    // =============================================
+
+    private static void testIteratorDemo() {
+        System.out.println("\n" + "=".repeat(60));
+        System.out.println("📋 MyLinkedList ITERATOR DEMO");
+        System.out.println("=".repeat(60));
+
+        MyLinkedList<String> list = new MyLinkedList<>();
+        list.addLast("A");
+        list.addLast("B");
+        list.addLast("C");
+        list.addLast("D");
+        list.addLast("E");
+
+        System.out.println("📊 List: " + list);
+        System.out.println("-".repeat(50));
+        System.out.println("🔄 Traversing with Iterator:");
+
+        int index = 0;
+        for (String element : list) {
+            System.out.println("   Element at index " + index + ": " + element);
+            index++;
+        }
+
+        System.out.println("-".repeat(50));
+        System.out.println("✅ Iterator successfully traversed all " + list.size() + " elements!");
+        System.out.println("📋 Copy this output to your report as evidence.");
+        System.out.println("📋 For the diagram, draw: null ← [A] ⇄ [B] ⇄ [C] ⇄ [D] ⇄ [E] → null");
     }
 }

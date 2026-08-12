@@ -1,7 +1,7 @@
-package main.com.ug.optimizer.datastructures.bst;
+package main.com.ug.optimizer.datastructures;
 
-import main.com.ug.optimizer.datastructures.bst.MyBST;
 import main.com.ug.optimizer.model.Location;
+
 
 /**
  * Unit tests for MyBST

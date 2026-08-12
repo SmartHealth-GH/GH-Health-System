@@ -1,6 +1,5 @@
 package main.com.ug.optimizer.datastructures.setmap;
 
-import main.com.ug.optimizer.datastructures.setmap.MyMap;
 import main.com.ug.optimizer.model.Location;
 
 /**

@@ -1,6 +1,6 @@
-package main.com.ug.optimizer.datastructures.linkedlist;
+package main.com.ug.optimizer.datastructures;
 
-import main.com.ug.optimizer.model.ServiceRequest;  // Example usage
+import main.com.ug.optimizer.model.ServiceRequest;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

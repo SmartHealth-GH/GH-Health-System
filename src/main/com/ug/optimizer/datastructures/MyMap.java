@@ -1,6 +1,6 @@
 package main.com.ug.optimizer.datastructures.setmap;
 
-import main.com.ug.optimizer.datastructures.hashtable.MyHashMap;
+import main.com.ug.optimizer.datastructures.MyHashMap;
 
 /**
  * Custom Map wrapper for MyHashMap

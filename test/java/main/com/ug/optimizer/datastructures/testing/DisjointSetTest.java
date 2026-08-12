@@ -2,6 +2,7 @@ package main.com.ug.optimizer.datastructures.disjointset;
 
 import main.com.ug.optimizer.datastructures.disjointset.DisjointSet;
 
+
 /**
  * Unit tests for DisjointSet
  *
@@ -48,7 +49,7 @@ public class DisjointSetTest {
 
     private static void testConstructor() {
         System.out.println("\n✅ Test: Constructor");
-        DisjointSet ds = new DisjointSet(10);
+        DisjointSet ds = new main.com.ug.optimizer.datastructures.disjointset.DisjointSet(10);
 
         assert ds.size() == 10 : "Size should be 10";
         assert ds.countSets() == 10 : "Should have 10 disjoint sets";
@@ -59,7 +60,7 @@ public class DisjointSetTest {
 
     private static void testFind() {
         System.out.println("\n✅ Test: Find");
-        DisjointSet ds = new DisjointSet(5);
+        DisjointSet ds = new main.com.ug.optimizer.datastructures.disjointset.DisjointSet(5);
 
         // Initially, each element is its own parent
         for (int i = 0; i < 5; i++) {

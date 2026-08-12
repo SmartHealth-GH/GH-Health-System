@@ -1,6 +1,6 @@
-package main.com.ug.optimizer.datastructures.deque;
+package main.com.ug.optimizer.datastructures;
 
-import main.com.ug.optimizer.datastructures.linkedlist.MyLinkedList;
+import main.com.ug.optimizer.datastructures.MyLinkedList;
 import main.com.ug.optimizer.model.ServiceRequest;  // For urgent insertion
 
 /**

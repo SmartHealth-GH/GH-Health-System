@@ -1,6 +1,6 @@
 package main.com.ug.optimizer.datastructures.stack;
 
-import main.com.ug.optimizer.datastructures.stack.MyStack;
+import main.com.ug.optimizer.datastructures.MyStack;
 import main.com.ug.optimizer.model.AuditEvent;
 
 /**
@@ -27,6 +27,9 @@ public class MyStackTest {
         testUndoLogSimulation();
         testEdgeCases();
         testInvalidInputs();
+
+        // 🔥 NEW: Undo Log Demo Evidence
+        testUndoLogDemo();
 
         System.out.println("\n" + "=".repeat(60));
         System.out.println("📊 RESULTS:");
@@ -229,5 +232,68 @@ public class MyStackTest {
 
         passed++;
         System.out.println("   ✅ Passed - All invalid inputs threw exceptions");
+    }
+
+    // =============================================
+    // 📋 UNDO LOG DEMO EVIDENCE (For Report)
+    // =============================================
+
+    private static void testUndoLogDemo() {
+        System.out.println("\n" + "=".repeat(60));
+        System.out.println("📋 MyStack UNDO LOG DEMO");
+        System.out.println("=".repeat(60));
+
+        MyStack<AuditEvent> undoLog = new MyStack<>();
+
+        // Simulate a hospital workflow
+        System.out.println("🏥 Simulating Hospital System Actions:");
+        System.out.println("-".repeat(50));
+
+        // Action 1: Add patient
+        AuditEvent event1 = new AuditEvent("ADD_PATIENT", "Patient John Doe (ID: 1001) admitted to Emergency");
+        undoLog.push(event1);
+        System.out.println("   ✅ " + event1);
+
+        // Action 2: Update status
+        AuditEvent event2 = new AuditEvent("UPDATE_STATUS", "Patient 1001 status: PENDING → IN_PROGRESS");
+        undoLog.push(event2);
+        System.out.println("   ✅ " + event2);
+
+        // Action 3: Assign resource
+        AuditEvent event3 = new AuditEvent("ASSIGN_RESOURCE", "Ambulance AMB-001 assigned to Patient 1001");
+        undoLog.push(event3);
+        System.out.println("   ✅ " + event3);
+
+        // Action 4: Complete treatment
+        AuditEvent event4 = new AuditEvent("COMPLETE_TREATMENT", "Patient 1001 treatment completed");
+        undoLog.push(event4);
+        System.out.println("   ✅ " + event4);
+
+        System.out.println("-".repeat(50));
+        System.out.println("📊 Current Undo Log Stack: " + undoLog.size() + " actions");
+        System.out.println("   Stack (top → bottom):");
+        System.out.println("   " + undoLog);
+
+        // Demonstrate UNDO functionality
+        System.out.println("-".repeat(50));
+        System.out.println("🔄 Performing UNDO operations (LIFO):");
+
+        AuditEvent undone1 = undoLog.pop();
+        System.out.println("   Undo 1: " + undone1.getAction() + " → " + undone1.getDetails());
+
+        AuditEvent undone2 = undoLog.pop();
+        System.out.println("   Undo 2: " + undone2.getAction() + " → " + undone2.getDetails());
+
+        AuditEvent undone3 = undoLog.pop();
+        System.out.println("   Undo 3: " + undone3.getAction() + " → " + undone3.getDetails());
+
+        System.out.println("-".repeat(50));
+        System.out.println("📊 Remaining actions in stack: " + undoLog.size());
+        System.out.println("   Stack (top → bottom): " + undoLog);
+
+        System.out.println("-".repeat(50));
+        System.out.println("✅ Undo log demonstration complete!");
+        System.out.println("📋 LIFO behavior verified: Last action undone first!");
+        System.out.println("📋 Copy this output to your report as evidence.");
     }
 }

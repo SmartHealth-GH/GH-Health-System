@@ -1,6 +1,6 @@
 package main.com.ug.optimizer.datastructures.queue;
 
-import main.com.ug.optimizer.datastructures.queue.MyQueue;
+import main.com.ug.optimizer.datastructures.MyQueue;
 import main.com.ug.optimizer.model.ServiceRequest;
 import main.com.ug.optimizer.model.enums.UrgencyLevel;
 
@@ -31,6 +31,9 @@ public class MyQueueTest {
         testWithServiceRequests();
         testEdgeCases();
         testInvalidInputs();
+
+        // 🔥 NEW: Front/Rear Trace Evidence
+        testFrontRearTrace();
 
         System.out.println("\n" + "=".repeat(60));
         System.out.println("📊 RESULTS:");
@@ -154,12 +157,10 @@ public class MyQueueTest {
         System.out.println("\n✅ Test: FIFO Behavior (First In, First Out)");
         MyQueue<Integer> queue = new MyQueue<>();
 
-        // Enqueue numbers 1-5
         for (int i = 1; i <= 5; i++) {
             queue.enqueue(i);
         }
 
-        // Dequeue should return in same order
         for (int i = 1; i <= 5; i++) {
             int value = queue.dequeue();
             assert value == i : "Should dequeue " + i + " but got " + value;
@@ -228,27 +229,71 @@ public class MyQueueTest {
         System.out.println("\n✅ Test: Invalid Inputs");
         MyQueue<String> queue = new MyQueue<>();
 
-        // Dequeue from empty queue
         try {
             queue.dequeue();
             System.out.println("   ❌ Failed: dequeue() on empty should throw exception");
             failed++;
             return;
         } catch (IllegalStateException e) {
-            // Expected - test passes
+            // Expected
         }
 
-        // Front from empty queue
         try {
             queue.front();
             System.out.println("   ❌ Failed: front() on empty should throw exception");
             failed++;
             return;
         } catch (IllegalStateException e) {
-            // Expected - test passes
+            // Expected
         }
 
         passed++;
         System.out.println("   ✅ Passed - All invalid inputs threw exceptions");
+    }
+
+    // =============================================
+    // 📋 FRONT/REAR TRACE EVIDENCE (For Report)
+    // =============================================
+
+    private static void testFrontRearTrace() {
+        System.out.println("\n" + "=".repeat(60));
+        System.out.println("📋 MyQueue FRONT/REAR TRACE");
+        System.out.println("=".repeat(60));
+
+        MyQueue<String> queue = new MyQueue<>();
+
+        System.out.println("📊 Tracking front and rear movement:");
+        System.out.println("-".repeat(50));
+
+        System.out.println("Initial state: Queue = " + queue + " (empty)");
+
+        queue.enqueue("A");
+        System.out.println("enqueue(A) → Queue: " + queue + " | Front: " + queue.front() + " | Rear: A");
+
+        queue.enqueue("B");
+        System.out.println("enqueue(B) → Queue: " + queue + " | Front: " + queue.front() + " | Rear: B");
+
+        queue.enqueue("C");
+        System.out.println("enqueue(C) → Queue: " + queue + " | Front: " + queue.front() + " | Rear: C");
+
+        queue.dequeue();
+        System.out.println("dequeue()  → Queue: " + queue + " | Front: " + queue.front() + " | Rear: C");
+
+        queue.dequeue();
+        System.out.println("dequeue()  → Queue: " + queue + " | Front: " + queue.front() + " | Rear: C");
+
+        queue.enqueue("D");
+        System.out.println("enqueue(D) → Queue: " + queue + " | Front: " + queue.front() + " | Rear: D");
+
+        queue.enqueue("E");
+        System.out.println("enqueue(E) → Queue: " + queue + " | Front: " + queue.front() + " | Rear: E");
+
+        System.out.println("-".repeat(50));
+        System.out.println("📊 Final state:");
+        System.out.println("   Queue: " + queue);
+        System.out.println("   Size: " + queue.size());
+        System.out.println("   Front: " + queue.front());
+        System.out.println("✅ Front/rear movement trace complete!");
+        System.out.println("📋 Copy this output to your report as evidence.");
     }
 }

@@ -1,6 +1,6 @@
 package main.com.ug.optimizer.datastructures.hashtable;
 
-import main.com.ug.optimizer.datastructures.hashtable.MyHashMap;
+import main.com.ug.optimizer.datastructures.MyHashMap;
 import main.com.ug.optimizer.model.Location;
 
 /**

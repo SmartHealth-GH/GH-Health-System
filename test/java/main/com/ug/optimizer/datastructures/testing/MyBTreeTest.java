@@ -1,7 +1,5 @@
 package main.com.ug.optimizer.datastructures.btree;
 
-import main.com.ug.optimizer.datastructures.btree.MyBTree;
-
 /**
  * Unit tests for MyBTree
  *
