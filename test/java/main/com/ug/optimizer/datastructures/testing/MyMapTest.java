@@ -1,4 +1,4 @@
-package main.com.ug.optimizer.datastructures.setmap;
+package main.com.ug.optimizer.datastructures;
 
 import main.com.ug.optimizer.model.Location;
 
@@ -113,7 +113,7 @@ public class MyMapTest {
 
         map.remove("A");
         assert map.isEmpty() : "Should be empty again";
-        assert map.size() == 0 : "Size should be 0";
+        assert map.size() == 0 : "Size should be 0 again";
 
         passed++;
         System.out.println("   ✅ Passed");
