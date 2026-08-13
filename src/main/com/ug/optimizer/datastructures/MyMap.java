@@ -1,12 +1,9 @@
-package main.com.ug.optimizer.datastructures.setmap;
+package main.com.ug.optimizer.datastructures;
 
 import main.com.ug.optimizer.datastructures.MyHashMap;
 
 /**
  * Custom Map wrapper for MyHashMap
- *
- * This is essentially a wrapper to provide a cleaner interface
- * if you want to use Map semantics without directly using MyHashMap.
  *
  * @param <K> The type of keys
  * @param <V> The type of values
