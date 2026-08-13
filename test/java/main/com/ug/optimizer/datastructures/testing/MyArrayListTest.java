@@ -1,4 +1,4 @@
-package main.com.ug.optimizer.datastructures.array;
+package main.com.ug.optimizer.datastructures.testing;
 
 import main.com.ug.optimizer.datastructures.MyArrayList;
 import main.com.ug.optimizer.model.Location;
