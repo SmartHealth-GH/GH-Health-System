@@ -32,6 +32,7 @@ public enum LocationType {
         if (text == null || text.isBlank()) {
             return null;
         }
+        //part2
         try {
             return LocationType.valueOf(text.toUpperCase().replace(" ", "_"));
         } catch (IllegalArgumentException e) {

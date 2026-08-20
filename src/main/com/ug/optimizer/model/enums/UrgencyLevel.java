@@ -11,17 +11,18 @@ public enum UrgencyLevel {
     URGENT(4, "Urgent"),
     EMERGENCY(5, "Emergency");
 
-    private final int value;
-    private final String displayName;
+    private final int value; //numeric value(1-5) stored in the database
+    private final String displayName; //user-friendly name for ui display
 
+    //constructor
     UrgencyLevel(int value, String displayName) {
         this.value = value;
         this.displayName = displayName;
     }
-
+    //getters
     public int getValue() { return value; }
     public String getDisplayName() { return displayName; }
-
+    //boolean
     public boolean isUrgent() {
         return this == URGENT || this == EMERGENCY;
     }
@@ -30,6 +31,7 @@ public enum UrgencyLevel {
         return this == EMERGENCY;
     }
 
+    //convert value to Enum
     public static UrgencyLevel fromValue(int value) {
         for (UrgencyLevel level : values()) {
             if (level.value == value) {

@@ -12,20 +12,23 @@ public enum RequestStatus {
 
     private final String displayName;
 
+
+
+    //constructor
     RequestStatus(String displayName) {
         this.displayName = displayName;
     }
-
+    //getter
     public String getDisplayName() { return displayName; }
-
+    //boolean
     public boolean isPending() {
         return this == PENDING || this == ON_HOLD;
     }
-
+    //
     public boolean isCompleted() {
         return this == COMPLETED;
     }
-
+    //convert string to enum
     public static RequestStatus fromString(String text) {
         if (text == null || text.isBlank()) {
             return null;
