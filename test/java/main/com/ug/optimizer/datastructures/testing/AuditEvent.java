@@ -1,299 +1,144 @@
-package main.com.ug.optimizer.datastructures.stack;
+package main.com.ug.optimizer.model; // This file belongs to the 'model' package
 
-import main.com.ug.optimizer.datastructures.MyStack;
-import main.com.ug.optimizer.model.AuditEvent;
+import java.time.LocalDateTime; // For date/time handling
+import java.time.format.DateTimeFormatter; // For formatting dates in a readable way
 
 /**
- * Unit tests for MyStack
+ * Represents an audit event for tracking system actions
+ * Used with the Stack data structure for undo operations
  *
  * @author GH-Health-System Team
  * @version 1.0
  */
-public class MyStackTest {
+public class AuditEvent {
 
-    private static int passed = 0;
-    private static int failed = 0;
+    // =============================================
+    // FIELDS - These are the data each AuditEvent stores
+    // =============================================
 
-    public static void main(String[] args) {
-        System.out.println("=".repeat(60));
-        System.out.println("🧪 TESTING MyStack");
-        System.out.println("=".repeat(60));
+    private String action;           // What action was performed? (e.g., "ADD_PATIENT")
+    private String details;          // Additional information about the action
+    private LocalDateTime timestamp; // When did this action happen?
 
-        testPushAndPop();
-        testPeek();
-        testIsEmptyAndSize();
-        testClear();
-        testContains();
-        testUndoLogSimulation();
-        testEdgeCases();
-        testInvalidInputs();
+    // =============================================
+    // CONSTRUCTORS - Ways to create an AuditEvent
+    // =============================================
 
-        // 🔥 NEW: Undo Log Demo Evidence
-        testUndoLogDemo();
-
-        System.out.println("\n" + "=".repeat(60));
-        System.out.println("📊 RESULTS:");
-        System.out.println("   ✅ Passed: " + passed);
-        System.out.println("   ❌ Failed: " + failed);
-        System.out.println("=".repeat(60));
-
-        if (failed == 0) {
-            System.out.println("🎉 ALL TESTS PASSED!");
-        } else {
-            System.out.println("⚠️ SOME TESTS FAILED!");
+    /**
+     * Constructor with action and details
+     * Creates an audit event with the current timestamp
+     */
+    public AuditEvent(String action, String details) {
+        // Validate: action cannot be null or empty
+        if (action == null || action.isBlank()) {
+            throw new IllegalArgumentException("Action cannot be null or empty");
         }
+        this.action = action.trim(); // Remove extra spaces
+        this.details = details != null ? details.trim() : ""; // Convert null to empty string
+        this.timestamp = LocalDateTime.now(); // Set to current time automatically
+    }
+
+    /**
+     * Constructor with action only (no details)
+     * Calls the full constructor with empty details
+     */
+    public AuditEvent(String action) {
+        this(action, ""); // Chain to the main constructor
     }
 
     // =============================================
-    // TEST METHODS
+    // GETTERS - Allow other classes to READ the data
     // =============================================
 
-    private static void testPushAndPop() {
-        System.out.println("\n✅ Test: Push and Pop");
-        MyStack<String> stack = new MyStack<>();
+    public String getAction() { return action; }
+    public String getDetails() { return details; }
+    public LocalDateTime getTimestamp() { return timestamp; }
 
-        stack.push("A");
-        stack.push("B");
-        stack.push("C");
+    // =============================================
+    // SETTERS - Allow other classes to UPDATE the data
+    // =============================================
 
-        assert stack.size() == 3 : "Size should be 3";
-        assert stack.toString().equals("[A, B, C]") : "Stack should be [A, B, C]";
-
-        String popped = stack.pop();
-        assert popped.equals("C") : "Popped should be 'C'";
-        assert stack.size() == 2 : "Size should be 2";
-        assert stack.toString().equals("[A, B]") : "Stack should be [A, B]";
-
-        popped = stack.pop();
-        assert popped.equals("B") : "Popped should be 'B'";
-        assert stack.size() == 1 : "Size should be 1";
-        assert stack.toString().equals("[A]") : "Stack should be [A]";
-
-        popped = stack.pop();
-        assert popped.equals("A") : "Popped should be 'A'";
-        assert stack.size() == 0 : "Size should be 0";
-        assert stack.isEmpty() : "Stack should be empty";
-        assert stack.toString().equals("[]") : "Stack should be []";
-
-        passed++;
-        System.out.println("   ✅ Passed");
-    }
-
-    private static void testPeek() {
-        System.out.println("\n✅ Test: Peek");
-        MyStack<String> stack = new MyStack<>();
-
-        stack.push("A");
-        stack.push("B");
-        stack.push("C");
-
-        String peeked = stack.peek();
-        assert peeked.equals("C") : "Peek should be 'C'";
-        assert stack.size() == 3 : "Size should remain 3 after peek";
-        assert stack.toString().equals("[A, B, C]") : "Stack should remain [A, B, C]";
-
-        passed++;
-        System.out.println("   ✅ Passed - Peek: " + peeked);
-    }
-
-    private static void testIsEmptyAndSize() {
-        System.out.println("\n✅ Test: IsEmpty and Size");
-        MyStack<String> stack = new MyStack<>();
-
-        assert stack.isEmpty() : "Should be empty";
-        assert stack.size() == 0 : "Size should be 0";
-
-        stack.push("A");
-        assert !stack.isEmpty() : "Should not be empty";
-        assert stack.size() == 1 : "Size should be 1";
-
-        stack.pop();
-        assert stack.isEmpty() : "Should be empty again";
-        assert stack.size() == 0 : "Size should be 0 again";
-
-        passed++;
-        System.out.println("   ✅ Passed");
-    }
-
-    private static void testClear() {
-        System.out.println("\n✅ Test: Clear");
-        MyStack<String> stack = new MyStack<>();
-
-        stack.push("A");
-        stack.push("B");
-        stack.push("C");
-
-        stack.clear();
-        assert stack.isEmpty() : "Should be empty after clear";
-        assert stack.size() == 0 : "Size should be 0 after clear";
-        assert stack.toString().equals("[]") : "Stack should be [] after clear";
-
-        passed++;
-        System.out.println("   ✅ Passed");
-    }
-
-    private static void testContains() {
-        System.out.println("\n✅ Test: Contains");
-        MyStack<String> stack = new MyStack<>();
-
-        stack.push("A");
-        stack.push("B");
-        stack.push("C");
-
-        assert stack.contains("A") : "Should contain 'A'";
-        assert stack.contains("B") : "Should contain 'B'";
-        assert stack.contains("C") : "Should contain 'C'";
-        assert !stack.contains("X") : "Should not contain 'X'";
-        assert stack.contains(null) : "Should contain null after adding";
-
-        passed++;
-        System.out.println("   ✅ Passed");
-    }
-
-    private static void testUndoLogSimulation() {
-        System.out.println("\n✅ Test: Undo Log Simulation (AuditEvent)");
-        MyStack<AuditEvent> undoLog = new MyStack<>();
-
-        // Simulate actions with undo log
-        AuditEvent event1 = new AuditEvent("ADD_PATIENT", "Patient John added");
-        AuditEvent event2 = new AuditEvent("UPDATE_STATUS", "Status changed to PENDING");
-        AuditEvent event3 = new AuditEvent("ASSIGN_RESOURCE", "Ambulance assigned");
-
-        undoLog.push(event1);
-        undoLog.push(event2);
-        undoLog.push(event3);
-
-        assert undoLog.size() == 3 : "Should have 3 events";
-
-        // Undo last action
-        AuditEvent undone = undoLog.pop();
-        assert undone.getAction().equals("ASSIGN_RESOURCE") : "Undone should be ASSIGN_RESOURCE";
-        assert undoLog.size() == 2 : "Should have 2 events after undo";
-
-        // Undo another
-        undone = undoLog.pop();
-        assert undone.getAction().equals("UPDATE_STATUS") : "Undone should be UPDATE_STATUS";
-        assert undoLog.size() == 1 : "Should have 1 event after undo";
-
-        // Peek at remaining
-        assert undoLog.peek().getAction().equals("ADD_PATIENT") : "Remaining should be ADD_PATIENT";
-        assert undoLog.size() == 1 : "Size should remain 1 after peek";
-
-        passed++;
-        System.out.println("   ✅ Passed - Undo log simulation working!");
-    }
-
-    private static void testEdgeCases() {
-        System.out.println("\n✅ Test: Edge Cases");
-        MyStack<String> stack = new MyStack<>();
-
-        // Single element
-        stack.push("Only");
-        assert stack.size() == 1 : "Size should be 1";
-        assert stack.peek().equals("Only") : "Peek should be 'Only'";
-        assert stack.pop().equals("Only") : "Pop should be 'Only'";
-        assert stack.isEmpty() : "Should be empty after pop";
-
-        // Push null
-        stack.push(null);
-        assert stack.size() == 1 : "Size should be 1";
-        assert stack.peek() == null : "Peek should be null";
-        assert stack.contains(null) : "Should contain null";
-        stack.pop();
-        assert stack.isEmpty() : "Should be empty after popping null";
-
-        passed++;
-        System.out.println("   ✅ Passed");
-    }
-
-    private static void testInvalidInputs() {
-        System.out.println("\n✅ Test: Invalid Inputs");
-        MyStack<String> stack = new MyStack<>();
-
-        // Pop from empty stack
-        try {
-            stack.pop();
-            System.out.println("   ❌ Failed: pop() on empty should throw exception");
-            failed++;
-            return;
-        } catch (IllegalStateException e) {
-            // Expected - test passes
+    /**
+     * Sets the action
+     * Validates: Action cannot be null or empty
+     */
+    public void setAction(String action) {
+        if (action == null || action.isBlank()) {
+            throw new IllegalArgumentException("Action cannot be null or empty");
         }
+        this.action = action.trim();
+    }
 
-        // Peek from empty stack
-        try {
-            stack.peek();
-            System.out.println("   ❌ Failed: peek() on empty should throw exception");
-            failed++;
-            return;
-        } catch (IllegalStateException e) {
-            // Expected - test passes
+    /**
+     * Sets the details
+     * Converts null to empty string, removes extra spaces
+     */
+    public void setDetails(String details) {
+        this.details = details != null ? details.trim() : "";
+    }
+
+    /**
+     * Sets the timestamp
+     * Validates: Timestamp cannot be null
+     */
+    public void setTimestamp(LocalDateTime timestamp) {
+        if (timestamp == null) {
+            throw new IllegalArgumentException("Timestamp cannot be null");
         }
-
-        passed++;
-        System.out.println("   ✅ Passed - All invalid inputs threw exceptions");
+        this.timestamp = timestamp;
     }
 
     // =============================================
-    // 📋 UNDO LOG DEMO EVIDENCE (For Report)
+    // HELPER METHODS - Extra useful functions
     // =============================================
 
-    private static void testUndoLogDemo() {
-        System.out.println("\n" + "=".repeat(60));
-        System.out.println("📋 MyStack UNDO LOG DEMO");
-        System.out.println("=".repeat(60));
+    /**
+     * Returns a formatted timestamp string
+     * Example: "2026-08-13 14:30:45"
+     * This is more readable than the default LocalDateTime format
+     */
+    public String getFormattedTimestamp() {
+        return timestamp.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
 
-        MyStack<AuditEvent> undoLog = new MyStack<>();
+    // =============================================
+    // STANDARD METHODS - toString, equals, hashCode
+    // =============================================
 
-        // Simulate a hospital workflow
-        System.out.println("🏥 Simulating Hospital System Actions:");
-        System.out.println("-".repeat(50));
+    /**
+     * Returns a readable string representation of the AuditEvent
+     * Example: "[2026-08-13 14:30:45] ADD_PATIENT - Patient John added"
+     * Useful for displaying audit logs in the console
+     */
+    @Override
+    public String toString() {
+        return String.format("[%s] %s %s",
+                getFormattedTimestamp(),
+                action,
+                details.isEmpty() ? "" : "- " + details);
+    }
 
-        // Action 1: Add patient
-        AuditEvent event1 = new AuditEvent("ADD_PATIENT", "Patient John Doe (ID: 1001) admitted to Emergency");
-        undoLog.push(event1);
-        System.out.println("   ✅ " + event1);
+    /**
+     * Compares two AuditEvent objects for equality
+     * Two AuditEvents are equal if they have the SAME action AND timestamp
+     * (Since events are unique, this is a reasonable comparison)
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AuditEvent that = (AuditEvent) o;
+        return action.equals(that.action) &&
+                timestamp.equals(that.timestamp);
+    }
 
-        // Action 2: Update status
-        AuditEvent event2 = new AuditEvent("UPDATE_STATUS", "Patient 1001 status: PENDING → IN_PROGRESS");
-        undoLog.push(event2);
-        System.out.println("   ✅ " + event2);
-
-        // Action 3: Assign resource
-        AuditEvent event3 = new AuditEvent("ASSIGN_RESOURCE", "Ambulance AMB-001 assigned to Patient 1001");
-        undoLog.push(event3);
-        System.out.println("   ✅ " + event3);
-
-        // Action 4: Complete treatment
-        AuditEvent event4 = new AuditEvent("COMPLETE_TREATMENT", "Patient 1001 treatment completed");
-        undoLog.push(event4);
-        System.out.println("   ✅ " + event4);
-
-        System.out.println("-".repeat(50));
-        System.out.println("📊 Current Undo Log Stack: " + undoLog.size() + " actions");
-        System.out.println("   Stack (top → bottom):");
-        System.out.println("   " + undoLog);
-
-        // Demonstrate UNDO functionality
-        System.out.println("-".repeat(50));
-        System.out.println("🔄 Performing UNDO operations (LIFO):");
-
-        AuditEvent undone1 = undoLog.pop();
-        System.out.println("   Undo 1: " + undone1.getAction() + " → " + undone1.getDetails());
-
-        AuditEvent undone2 = undoLog.pop();
-        System.out.println("   Undo 2: " + undone2.getAction() + " → " + undone2.getDetails());
-
-        AuditEvent undone3 = undoLog.pop();
-        System.out.println("   Undo 3: " + undone3.getAction() + " → " + undone3.getDetails());
-
-        System.out.println("-".repeat(50));
-        System.out.println("📊 Remaining actions in stack: " + undoLog.size());
-        System.out.println("   Stack (top → bottom): " + undoLog);
-
-        System.out.println("-".repeat(50));
-        System.out.println("✅ Undo log demonstration complete!");
-        System.out.println("📋 LIFO behavior verified: Last action undone first!");
-        System.out.println("📋 Copy this output to your report as evidence.");
+    /**
+     * Returns a hash code for the AuditEvent
+     * Required when overriding equals()
+     * Used in collections like HashMap and HashSet
+     */
+    @Override
+    public int hashCode() {
+        return action.hashCode() + timestamp.hashCode();
     }
 }

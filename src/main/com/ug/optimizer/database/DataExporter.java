@@ -1,28 +1,44 @@
 package main.com.ug.optimizer.database;
+// This file belongs to the database package
 
-import main.com.ug.optimizer.model.*;
-import main.com.ug.optimizer.model.enums.*;
+// =============================================
+// IMPORTS - Bringing in other classes we need
+// =============================================
 
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Scanner;
+import main.com.ug.optimizer.model.*;                     // All model classes
+import main.com.ug.optimizer.model.enums.*;               // All enums
+
+import java.sql.SQLException;        // For database errors
+import java.util.List;               // For lists of data
+import java.util.Scanner;            // For reading user input
 
 /**
  * Utility class to print/export all data from the database
  * User is prompted to choose what to print
+ *
+ * This is the "view data" tool - shows what's in the database
  *
  * @author GH-Health-System Team
  * @version 1.0
  */
 public class DataExporter {
 
-    private static Scanner scanner = new Scanner(System.in);
+    // =============================================
+    // FIELDS
+    // =============================================
+
+    private static Scanner scanner = new Scanner(System.in); // For user input
+
+    // =============================================
+    // MAIN MENU - Export options
+    // =============================================
 
     /**
      * Show the export menu (called from DatabaseTest)
+     * This is the entry point for viewing data
      */
     public static void showMenu() throws SQLException {
-        while (true) {
+        while (true) {  // Infinite loop until user chooses "Back"
             System.out.println("\n" + "=".repeat(50));
             System.out.println("📋 EXPORT MENU");
             System.out.println("=".repeat(50));
@@ -39,31 +55,35 @@ public class DataExporter {
 
             String input = scanner.nextLine().trim();
 
+            // =============================================
+            // Handle each option
+            // =============================================
+
             switch (input) {
                 case "1":
-                    printLocations();
+                    printLocations();        // Show all locations
                     break;
                 case "2":
-                    printRoads();
+                    printRoads();            // Show all roads
                     break;
                 case "3":
-                    printRequests();
+                    printRequests();         // Show all requests
                     break;
                 case "4":
-                    printResources();
+                    printResources();        // Show all resources
                     break;
                 case "5":
-                    printAllData();
+                    printAllData();          // Show EVERYTHING
                     break;
                 case "6":
-                    printSummary();
+                    printSummary();          // Show summary only
                     break;
                 case "7":
-                    exportToCsvPreview();
+                    exportToCsvPreview();    // CSV preview
                     break;
                 case "0":
                     System.out.println("   🔙 Returning to main menu...");
-                    return;
+                    return;                  // Exit the menu
                 default:
                     System.out.println("   ❌ Invalid option. Please try again.");
             }
@@ -73,36 +93,48 @@ public class DataExporter {
         }
     }
 
+    // =============================================
+    // OPTION 1 - Print all Locations
+    // =============================================
+
     /**
-     * Print all locations
+     * Print all locations in a formatted table
+     * Shows: ID, NAME, AREA, TYPE
      */
     private static void printLocations() throws SQLException {
         LocationDAO locDAO = new LocationDAO();
-        List<Location> locations = locDAO.getAllLocations();
+        List<Location> locations = locDAO.getAllLocations();  // Get all locations
 
+        // Print header
         System.out.println("\n📍 LOCATIONS (" + locations.size() + "):");
         System.out.println("-".repeat(70));
         System.out.printf("  %-4s | %-30s | %-15s | %-12s%n", "ID", "NAME", "AREA", "TYPE");
         System.out.println("-".repeat(70));
 
+        // Print each location
         for (Location loc : locations) {
             System.out.printf("  %-4d | %-30s | %-15s | %-12s%n",
                     loc.getLocationId(),
-                    truncate(loc.getName(), 30),
-                    truncate(loc.getArea(), 15),
-                    loc.getType().getDisplayName()
+                    truncate(loc.getName(), 30),       // Truncate long names
+                    truncate(loc.getArea(), 15),       // Truncate long areas
+                    loc.getType().getDisplayName()      // e.g., "emergency"
             );
         }
         System.out.println("-".repeat(70));
         System.out.println("  ✅ Total: " + locations.size() + " locations");
     }
 
+    // =============================================
+    // OPTION 2 - Print all Roads
+    // =============================================
+
     /**
-     * Print all roads
+     * Print all roads in a formatted table
+     * Shows: ID, FROM, TO, DISTANCE, TIME, CONDITION
      */
     private static void printRoads() throws SQLException {
         RoadDAO roadDAO = new RoadDAO();
-        List<Road> roads = roadDAO.getAllRoads();
+        List<Road> roads = roadDAO.getAllRoads();  // Get all roads
 
         System.out.println("\n🛤️ ROADS (" + roads.size() + "):");
         System.out.println("-".repeat(60));
@@ -124,12 +156,18 @@ public class DataExporter {
         System.out.println("  ✅ Total: " + roads.size() + " roads");
     }
 
+    // =============================================
+    // OPTION 3 - Print all Service Requests
+    // =============================================
+
     /**
-     * Print all service requests (with option to limit)
+     * Print all service requests
+     * Asks user how many to display (for large datasets)
+     * Shows: ID, CATEGORY, URGENCY, STATUS, DEADLINE
      */
     private static void printRequests() throws SQLException {
         ServiceRequestDAO reqDAO = new ServiceRequestDAO();
-        List<ServiceRequest> requests = reqDAO.getAllRequests();
+        List<ServiceRequest> requests = reqDAO.getAllRequests();  // Get all requests
 
         System.out.println("\n📋 SERVICE REQUESTS (" + requests.size() + "):");
         System.out.println("-".repeat(80));
@@ -137,20 +175,22 @@ public class DataExporter {
                 "ID", "CATEGORY", "URGENCY", "STATUS", "DEADLINE");
         System.out.println("-".repeat(80));
 
+        // =============================================
         // Ask user how many to display
+        // =============================================
         int total = requests.size();
         int maxDisplay = total; // Default: show all
 
-        if (total > 20) {
+        if (total > 20) {  // If more than 20, ask the user
             System.out.print("  ⚠️ There are " + total + " requests. How many to display? (Enter number, or 'all'): ");
             String input = scanner.nextLine().trim();
 
             if (input.equalsIgnoreCase("all")) {
-                maxDisplay = total;
+                maxDisplay = total;  // Show all
             } else {
                 try {
                     int userInput = Integer.parseInt(input);
-                    maxDisplay = Math.min(userInput, total);
+                    maxDisplay = Math.min(userInput, total);  // Show limited number
                 } catch (NumberFormatException e) {
                     System.out.println("     ⚠️ Invalid input. Showing all " + total + " requests.");
                     maxDisplay = total;
@@ -159,15 +199,16 @@ public class DataExporter {
             System.out.println();
         }
 
+        // Print the requests
         int count = 0;
         for (ServiceRequest req : requests) {
             if (count >= maxDisplay) break;
             System.out.printf("  %-5d | %-18s | %-10s | %-12s | %-10s%n",
                     req.getRequestId(),
                     truncate(req.getCategory(), 18),
-                    req.getUrgency().getDisplayName(),
-                    req.getStatus().getDisplayName(),
-                    req.getDeadline().toString().substring(0, 10)
+                    req.getUrgency().getDisplayName(),    // e.g., "Emergency"
+                    req.getStatus().getDisplayName(),     // e.g., "Pending"
+                    req.getDeadline().toString().substring(0, 10)  // Show only date
             );
             count++;
         }
@@ -180,12 +221,17 @@ public class DataExporter {
         }
     }
 
+    // =============================================
+    // OPTION 4 - Print all Resources
+    // =============================================
+
     /**
-     * Print all resources
+     * Print all resources in a formatted table
+     * Shows: ID, TYPE, STATUS, CAPACITY
      */
     private static void printResources() throws SQLException {
         ResourceDAO resDAO = new ResourceDAO();
-        List<Resource> resources = resDAO.getAllResources();
+        List<Resource> resources = resDAO.getAllResources();  // Get all resources
 
         System.out.println("\n🚑 RESOURCES (" + resources.size() + "):");
         System.out.println("-".repeat(60));
@@ -197,7 +243,7 @@ public class DataExporter {
             System.out.printf("  %-4d | %-18s | %-12s | %-8d%n",
                     res.getResourceId(),
                     truncate(res.getType(), 18),
-                    res.getStatusDisplayName(),
+                    res.getStatusDisplayName(),    // e.g., "Available"
                     res.getCapacity()
             );
         }
@@ -205,23 +251,34 @@ public class DataExporter {
         System.out.println("  ✅ Total: " + resources.size() + " resources");
     }
 
+    // =============================================
+    // OPTION 5 - Print ALL Data
+    // =============================================
+
     /**
-     * Print ALL data
+     * Print ALL data (everything in the database)
+     * Calls all the print methods in sequence
      */
     private static void printAllData() throws SQLException {
         System.out.println("\n" + "=".repeat(70));
         System.out.println("📊 FULL DATABASE EXPORT");
         System.out.println("=".repeat(70));
 
-        printLocations();
-        printRoads();
-        printRequests();
-        printResources();
-        printSummary();
+        printLocations();   // Show locations
+        printRoads();       // Show roads
+        printRequests();    // Show requests
+        printResources();   // Show resources
+        printSummary();     // Show summary
     }
+
+    // =============================================
+    // OPTION 6 - Print Summary Statistics
+    // =============================================
 
     /**
      * Print summary statistics only
+     * Shows counts of all entities
+     * Does NOT show individual records
      */
     private static void printSummary() throws SQLException {
         LocationDAO locDAO = new LocationDAO();
@@ -243,14 +300,22 @@ public class DataExporter {
         System.out.println("=".repeat(60));
     }
 
+    // =============================================
+    // OPTION 7 - Export to CSV Preview
+    // =============================================
+
     /**
      * Export to CSV (console preview)
+     * Shows the first 5 rows of each table in CSV format
+     * This is a PREVIEW only - actual CSV files are in data/ folder
      */
     private static void exportToCsvPreview() throws SQLException {
         System.out.println("\n📤 EXPORTING DATA (console preview)...");
         System.out.println("-".repeat(60));
 
-        // Preview first 5 rows of each table
+        // =============================================
+        // Preview LOCATIONS (first 5 rows)
+        // =============================================
         System.out.println("\n📍 LOCATIONS (first 5 rows):");
         LocationDAO locDAO = new LocationDAO();
         List<Location> locations = locDAO.getAllLocations();
@@ -260,7 +325,7 @@ public class DataExporter {
                     loc.getLocationId(),
                     loc.getName(),
                     loc.getArea(),
-                    loc.getType().name(),
+                    loc.getType().name(),       // ENUM name (e.g., "EMERGENCY")
                     loc.getLatitude(),
                     loc.getLongitude()
             );
@@ -269,6 +334,9 @@ public class DataExporter {
             System.out.println("  ... and " + (locations.size() - 5) + " more");
         }
 
+        // =============================================
+        // Preview REQUESTS (first 5 rows)
+        // =============================================
         System.out.println("\n📋 REQUESTS (first 5 rows):");
         ServiceRequestDAO reqDAO = new ServiceRequestDAO();
         List<ServiceRequest> requests = reqDAO.getAllRequests();
@@ -279,10 +347,10 @@ public class DataExporter {
                     req.getSourceId(),
                     req.getDestinationId(),
                     req.getCategory(),
-                    req.getUrgency().getValue(),
+                    req.getUrgency().getValue(),    // Numeric value (1-5)
                     req.getTimeSubmitted().toString(),
                     req.getDeadline().toString(),
-                    req.getStatus().name()
+                    req.getStatus().name()          // ENUM name
             );
         }
         if (requests.size() > 5) {
@@ -293,12 +361,22 @@ public class DataExporter {
         System.out.println("  📁 Actual CSV files are in: data/ folder");
     }
 
+    // =============================================
+    // HELPER METHOD - Truncate strings
+    // =============================================
+
     /**
      * Truncate a string to a maximum length
+     * Adds "..." if the string is too long
+     * Prevents table formatting from breaking
+     *
+     * @param str The string to truncate
+     * @param maxLen Maximum length allowed
+     * @return Truncated string
      */
     private static String truncate(String str, int maxLen) {
-        if (str == null) return "null";
-        if (str.length() <= maxLen) return str;
-        return str.substring(0, maxLen - 3) + "...";
+        if (str == null) return "null";           // Handle null values
+        if (str.length() <= maxLen) return str;   // Return as-is if short
+        return str.substring(0, maxLen - 3) + "...";  // Truncate and add "..."
     }
 }
